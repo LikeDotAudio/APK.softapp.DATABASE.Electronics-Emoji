@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Complete Electronics Symbols</title>
+    <style>
+        body { font-family: sans-serif; background-color: #000; color: #eee; padding: 20px; }
+        h1 { margin-bottom: 0; }
+        .caption { max-width: 62ch; color: #aaa; font-size: 0.9em; line-height: 1.5; }
+        .caption code { color: #cfc; }
+        .batch-title { font-size: 1.5em; font-weight: bold; border-bottom: 3px solid #888; margin-top: 45px; padding-bottom: 4px; }
+        h2 { border-bottom: 2px solid #555; margin-top: 20px; font-size: 1.1em; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
+        .icon-card { background: #222; border: 1px solid #555; padding: 10px; text-align: center; border-radius: 8px; color: #ddd; }
+        /* Each emoji's window: white background + invert => black tile with a white symbol.
+           invert() also correctly flips fills (arrowhead, meter letters) and leaves fill="none" transparent. */
+        svg { display: block; margin: 0 auto 5px; background: #fff; filter: invert(1); }
+
+        /* Batch-specific icon sizes */
+        .b60 svg { width: 60px; height: 60px; }
+        .b18 svg { width: 18px; height: 18px; }
+        .b72 svg { width: 72px; height: 72px; }
+
+        /* Tighter layout for the small emoji batch */
+        .b18 .grid { grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 8px; }
+        .b18 .icon-card { padding: 6px; font-size: 10px; }
+        .b72 .grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+    </style>
+</head>
+<body>
+    <h1 id="gallery-title">🖼️ Comprehensive Electronics Schematic Symbols</h1>
+    <p class="caption" id="gallery-caption">
+        Every symbol module under <code>symbols/</code>, drawn live from its own inline SVG at
+        three display sizes and grouped by category. Each tile is named for its symbol; the
+        picture is the whole meaning of the tile, so the name is carried on the drawing itself.
+        Needs <code>server.py</code> running — the symbols are ES modules and a
+        <code>file://</code> open shows an empty grid with no error.
+    </p>
+    <div id="app"></div>
+
+    <script type="module">
+        import icons from './symbols/index.js';
+
+        // Each batch renders the full icon set at a different display size.
+        const batches = [
+            { title: 'Default — 60 × 60', cls: 'b60' },
+            { title: 'Emoji — 18 × 18', cls: 'b18' },
+            { title: 'Emoji — 72 × 72', cls: 'b72' }
+        ];
+
+        const app = document.getElementById('app');
+
+        // Group icons by category once, preserving first-seen order.
+        const order = [];
+        const byCategory = new Map();
+        for (const icon of icons) {
+            if (!byCategory.has(icon.category)) {
+                byCategory.set(icon.category, []);
+                order.push(icon.category);
+            }
+            byCategory.get(icon.category).push(icon);
+        }
+
+        // The tiles hold INLINE <svg>, not <img>, so `alt` has no meaning here:
+        // the equivalent accessible name is role="img" + aria-label on the <svg>
+        // itself. The visible caption under each drawing repeats that name, so it
+        // is aria-hidden -- otherwise every tile announces twice.
+        const escape = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        const label = (icon) => `${icon.name} — ${icon.category} schematic symbol`;
+
+        let batchIndex = 0;
+        for (const batch of batches) {
+            const section = document.createElement('section');
+            section.className = 'batch ' + batch.cls;
+
+            const title = document.createElement('div');
+            title.className = 'batch-title';
+            title.id = `batch-${batchIndex++}`;
+            title.textContent = batch.title;
+            section.setAttribute('role', 'region');
+            section.setAttribute('aria-labelledby', title.id);
+            section.appendChild(title);
+
+            for (const category of order) {
+                const heading = document.createElement('h2');
+                heading.id = `${title.id}-${category.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`;
+                heading.textContent = category;
+                section.appendChild(heading);
+
+                const grid = document.createElement('div');
+                grid.className = 'grid';
+                grid.setAttribute('role', 'list');
+                grid.setAttribute('aria-labelledby', heading.id);
+                for (const icon of byCategory.get(category)) {
+                    const card = document.createElement('div');
+                    card.className = 'icon-card';
+                    card.setAttribute('role', 'listitem');
+                    const drawing = icon.svg.replace(
+                        /^<svg/i,
+                        `<svg role="img" aria-label="${escape(label(icon))}"`
+                    );
+                    card.innerHTML = drawing
+                        + `<span aria-hidden="true">${escape(icon.name)}</span>`;
+                    grid.appendChild(card);
+                }
+                section.appendChild(grid);
+            }
+
+            app.appendChild(section);
+        }
+    </script>
+</body>
+</html>

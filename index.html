@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proposal for Electronics Schematic Symbol Emoji</title>
+<style>
+    /* ---- White document. Letter page for PDF export. ---- */
+    @page { size: letter; margin: 22mm 20mm; }
+
+    :root {
+        --ink:    #111;
+        --muted:  #555;
+        --line:   #bbb;
+        --accent: #1a4d8f;
+        --tile:   #0d1b2a;   /* schematic "color" tile background */
+        --copper: #c97b30;   /* schematic "color" stroke */
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: "Georgia", "Times New Roman", serif;
+        color: var(--ink);
+        background: #fff;
+        max-width: 8.5in;
+        margin: 0 auto;
+        padding: 28px 36px 64px;
+        line-height: 1.5;
+        font-size: 15px;
+    }
+
+    h1 { font-size: 1.85em; margin: 0 0 4px; line-height: 1.2; }
+    .subtitle { color: var(--muted); font-style: italic; margin: 0 0 18px; }
+
+    h2 {
+        font-size: 1.2em;
+        border-bottom: 2px solid var(--accent);
+        color: var(--accent);
+        padding-bottom: 3px;
+        margin: 30px 0 12px;
+    }
+    h3 { font-size: 1.02em; margin: 18px 0 6px; }
+
+    p { margin: 8px 0; }
+    a { color: var(--accent); }
+
+    /* ---- Metadata header block (required top-of-first-page fields) ---- */
+    .meta {
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 14px 18px;
+        margin: 0 0 8px;
+        background: #fafafa;
+    }
+    .meta dl { display: grid; grid-template-columns: 150px 1fr; gap: 4px 14px; margin: 0; }
+    .meta dt { font-weight: bold; color: var(--muted); font-family: sans-serif; font-size: 0.82em; text-transform: uppercase; letter-spacing: 0.04em; align-self: center; }
+    .meta dd { margin: 0; }
+
+    /* ======================================================================
+       GALLERY — every symbol, white lines on a black tile (near the top)
+       The source SVGs are black-on-transparent; `background:#fff; invert(1)`
+       turns each tile black and the symbol (incl. fills/arrowheads) white.
+       ====================================================================== */
+    .gallery { margin: 10px 0 8px; }
+    .gallery .batch {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 14px 16px 18px;
+        margin: 14px 0;
+    }
+    .gallery .batch-title {
+        font-family: sans-serif; font-weight: 700; color: var(--ink);
+        font-size: 1.05em; letter-spacing: 0.03em;
+        border-bottom: 2px solid var(--line); padding-bottom: 6px; margin: 0 0 10px;
+    }
+    .gallery .cat {
+        font-family: sans-serif; font-size: 0.82em; text-transform: uppercase;
+        letter-spacing: 0.05em; color: var(--muted); margin: 16px 0 8px; border: 0;
+    }
+    .gallery .grid {
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px;
+    }
+    .gallery .icon-card {
+        background: #d8d8d8; border: 1px solid #777; border-radius: 8px;
+        padding: 10px 6px; text-align: center;
+        font-family: sans-serif; font-size: 0.74em; color: #333;
+    }
+    .gallery svg, .gallery img {
+        display: block; margin: 0 auto 6px;
+        /* checkerboard so transparency is visible; white fills show opaque, transparent areas show the checker */
+        background-color: #fff;
+        background-image:
+            linear-gradient(45deg, #c4c4c4 25%, transparent 25%),
+            linear-gradient(-45deg, #c4c4c4 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #c4c4c4 75%),
+            linear-gradient(-45deg, transparent 75%, #c4c4c4 75%);
+        background-size: 8px 8px;
+        background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+    }
+    .gallery .b60 svg { width: 60px; height: 60px; }
+    .gallery .b18 svg { width: 18px; height: 18px; }
+    .gallery .b72 svg { width: 72px; height: 72px; }
+    .gallery .bsvg svg { width: 100px; height: 100px; }   /* vector source batch, full viewBox */
+    .gallery .b18 .grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
+    .gallery .b18 .icon-card { padding: 6px 4px; font-size: 0.66em; }
+
+    /* 18x18 shown four ways: transparency (checker), white, black, orange */
+    .gallery .b18 .swatches { display: flex; gap: 4px; justify-content: center; margin-bottom: 6px; }
+    .gallery .b18 .swatch { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border: 1px solid #999; border-radius: 3px; }
+    .gallery .b18 .swatch img { display: block; width: 18px; height: 18px; background: none; }
+    .gallery .b18 .swatch.white  { background: #fff; }
+    .gallery .b18 .swatch.black  { background: #000; }
+    .gallery .b18 .swatch.orange { background: rgb(244,144,44); }
+    .gallery .b18 .swatch.checker {
+        background-color: #fff;
+        background-image:
+            linear-gradient(45deg, #c4c4c4 25%, transparent 25%),
+            linear-gradient(-45deg, #c4c4c4 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #c4c4c4 75%),
+            linear-gradient(-45deg, transparent 75%, #c4c4c4 75%);
+        background-size: 8px 8px;
+        background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+    }
+
+    /* ---- Image specimen tables (required color + B/W, 18 & 72) ---- */
+    .specimens { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 14px 0; }
+    .specimen { border: 1px solid var(--line); border-radius: 6px; padding: 12px 8px; text-align: center; background: #fff; }
+    .specimen .frame { display: flex; align-items: center; justify-content: center; min-height: 84px; }
+    .specimen .label { font-family: sans-serif; font-size: 0.72em; color: var(--muted); margin-top: 8px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .specimen .px { font-family: sans-serif; font-size: 0.78em; font-weight: bold; }
+    svg.bw  { stroke: #000; }
+    .tile { background: #000; border-radius: 4px; padding: 6px; }
+    svg.white { stroke: #fff; }
+    .s18 { width: 18px; height: 18px; }
+    .s72 { width: 72px; height: 72px; }
+
+    /* ---- Evidence-of-frequency screenshot placeholders ---- */
+    .evidence { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0; }
+    .shot {
+        border: 1px dashed var(--line); border-radius: 6px;
+        background: repeating-linear-gradient(45deg,#fafafa,#fafafa 10px,#f1f1f1 10px,#f1f1f1 20px);
+        min-height: 150px; display: flex; flex-direction: column;
+        align-items: center; justify-content: center; text-align: center;
+        padding: 14px; font-family: sans-serif;
+    }
+    .shot .src { font-weight: bold; color: var(--ink); font-size: 0.95em; }
+    .shot .hint { color: var(--muted); font-size: 0.8em; margin-top: 6px; }
+    .shot.wide { grid-column: 1 / -1; }
+
+    table.freq { width: 100%; border-collapse: collapse; margin: 10px 0; font-family: sans-serif; font-size: 0.86em; }
+    table.freq th, table.freq td { border: 1px solid var(--line); padding: 6px 9px; text-align: left; }
+    table.freq th { background: #f2f2f2; }
+
+    blockquote { border-left: 3px solid var(--accent); margin: 12px 0; padding: 4px 14px; color: var(--muted); font-style: italic; }
+
+    ul, ol { margin: 8px 0; padding-left: 22px; }
+    li { margin: 4px 0; }
+
+    /* ======================================================================
+       PROOF — appended frequency-link table (light theme, white-on-black icons)
+       ====================================================================== */
+    .proof .notes, .proof .baseline {
+        background: #fafafa; border: 1px solid var(--line);
+        border-radius: 8px; padding: 12px 16px; margin: 12px 0;
+    }
+    .proof .notes ul { margin: 6px 0 0; }
+    .proof .notes li { color: var(--muted); }
+    .proof .notes code, .proof .query code { background: #eef0f2; padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+    .proof .baseline { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
+    .proof .baseline strong { color: #a36b00; }
+
+    .proof .scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+    .proof table { border-collapse: collapse; width: 100%; min-width: 1000px; font-family: sans-serif; }
+    .proof thead th {
+        position: sticky; top: 0; background: #eef2f8; color: var(--ink);
+        text-align: left; font-size: 0.76em; text-transform: uppercase; letter-spacing: 0.04em;
+        padding: 9px 10px; border-bottom: 2px solid var(--accent); white-space: nowrap;
+    }
+    .proof tbody td { padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; font-size: 0.85em; }
+    .proof tbody tr:hover { background: #f6f9ff; }
+    .proof .sym { display: flex; align-items: center; gap: 9px; white-space: nowrap; }
+    .proof .sym svg { width: 30px; height: 30px; background: #fff; border: 1px solid var(--line); border-radius: 4px; flex: none; }
+    .proof .sym .nm { font-weight: 600; }
+    .proof .cat { color: var(--muted); font-size: 0.85em; white-space: nowrap; }
+    .proof .query .why { display: block; color: var(--muted); font-size: 0.82em; margin-top: 4px; max-width: 26ch; }
+    .proof .lk { white-space: nowrap; }
+    .proof .lk::before { content: "↗ "; color: var(--muted); }
+    .proof .cat-row td { background: #eef2f8; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.78em; }
+
+    footer { margin-top: 40px; border-top: 1px solid var(--line); padding-top: 10px; font-family: sans-serif; font-size: 0.78em; color: var(--muted); }
+
+    /* Print page-break helpers */
+    h2, h3 { break-after: avoid; }
+    .specimens, .evidence, .set, table.freq, .meta { break-inside: avoid; }
+    .page-break { break-before: page; }
+
+    @media print {
+        body { padding: 0; font-size: 11.5pt; max-width: none; }
+        .shot { background: #fff; }
+        .proof .scroll { overflow: visible; }
+        a { color: var(--ink); text-decoration: none; }
+    }
+</style>
+</head>
+<body>
+
+    <h1>🔌 Proposal for Electronics Schematic Symbol Emoji</h1>
+    <p class="subtitle">A set of standardized component glyphs for circuit, electronics, and engineering communication</p>
+
+    <!-- ==================== REQUIRED HEADER FIELDS ==================== -->
+    <section class="meta">
+        <dl>
+            <dt>Title</dt>
+            <dd>Proposal for Electronics Schematic Symbol Emoji
+                <em>(descriptive — covers a coordinated family led by the Resistor glyph)</em></dd>
+
+            <dt>Submitter(s)</dt>
+            <dd>Anthony Kuzub &lt;Anthony@Kuzub.com&gt;</dd>
+
+            <dt>Date</dt>
+            <dd>2026-05-31</dd>
+
+            <dt>Keywords</dt>
+            <dd>resistor, capacitor, diode, transistor, inductor, battery, schematic,
+                circuit, electronics, logic gate, component, breadboard, engineering, EE</dd>
+
+            <dt>Category</dt>
+            <dd>Symbols &nbsp;(sub-grouping: <em>Other-symbol</em>; adjacent to existing
+                ⚡ <em>High Voltage</em> and 🔋 <em>Battery</em>)</dd>
+        </dl>
+    </section>
+
+    <!-- ==================== GALLERY (near the top) ==================== -->
+    <h2>🖼️ Gallery — Complete Symbol Set</h2>
+    <p>
+        All proposed glyphs (plus optional colour variants), shown in three forms: the rasterised
+        <strong>18×18 PNG</strong> and <strong>72×72 PNG</strong> emoji (generated by
+        <code>renderPNG.py</code> into <code>symbols/18X18</code> and <code>symbols/72X72</code>), and
+        the live <strong>vector SVG source</strong> rendered as-is.
+    </p>
+    <div class="gallery" id="gallery"></div>
+
+    <!-- ==================== ABSTRACT ==================== -->
+    <h2>📄 1. Abstract</h2>
+    <p>
+        We propose a coordinated set of <strong>electronics schematic symbol emoji</strong> — the
+        standardized glyphs that engineers, students, and hobbyists use to describe circuits.
+        Despite billions of physical components in daily use and a vast educational and maker
+        community, the emoji library contains <em>no</em> way to write a resistor, capacitor,
+        diode, transistor, or logic gate. This proposal documents the candidate glyphs, their
+        rendering at the required sizes, their licensing, and evidence that the underlying terms
+        are searched, written, and discussed at high and sustained frequency.
+    </p>
+
+    <!-- ==================== IMAGES / SPECIMENS ==================== -->
+    <h2>📐 2. Images &amp; Required Sizes</h2>
+    <p>
+        Each glyph is supplied as a resolution-independent SVG and rasterizes cleanly to both
+        required sizes. Below is the lead candidate — <strong>Resistor</strong> — shown in the four
+        mandated forms: white-on-black and black-and-white, at 18×18 and 72×72 pixels.
+    </p>
+
+    <div class="specimens">
+        <div class="specimen">
+            <div class="frame"><div class="tile"><svg class="white s18" viewBox="0 0 100 100" fill="none" stroke-width="3"><polyline points="0,50 15,50 25,30 45,70 65,30 85,70 95,50 100,50"/></svg></div></div>
+            <div class="px">18 × 18</div>
+            <div class="label">White on black</div>
+        </div>
+        <div class="specimen">
+            <div class="frame"><div class="tile"><svg class="white s72" viewBox="0 0 100 100" fill="none" stroke-width="3"><polyline points="0,50 15,50 25,30 45,70 65,30 85,70 95,50 100,50"/></svg></div></div>
+            <div class="px">72 × 72</div>
+            <div class="label">White on black</div>
+        </div>
+        <div class="specimen">
+            <div class="frame"><svg class="bw s18" viewBox="0 0 100 100" fill="none" stroke-width="3"><polyline points="0,50 15,50 25,30 45,70 65,30 85,70 95,50 100,50"/></svg></div>
+            <div class="px">18 × 18</div>
+            <div class="label">Black &amp; White</div>
+        </div>
+        <div class="specimen">
+            <div class="frame"><svg class="bw s72" viewBox="0 0 100 100" fill="none" stroke-width="3"><polyline points="0,50 15,50 25,30 45,70 65,30 85,70 95,50 100,50"/></svg></div>
+            <div class="px">72 × 72</div>
+            <div class="label">Black &amp; White</div>
+        </div>
+    </div>
+
+    <!-- ==================== IP / LICENSE ==================== -->
+    <h2>⚖️ 3. IP Rights &amp; License</h2>
+    <p>
+        All glyphs in this proposal are <strong>original SVG artwork</strong> authored by the
+        submitter for this submission. The schematic forms they depict (e.g. the zig-zag resistor,
+        the distinctive-shape logic gates) are <strong>standardized, non-copyrightable functional
+        notation</strong> defined by international standards (IEC 60617 / ANSI Y32.2) and are in
+        common public use; this proposal claims no ownership over the notation itself.
+    </p>
+    <ul>
+        <li><strong>Artwork license:</strong> released by the author under
+            <strong>CC0 1.0 (public domain dedication)</strong>, granting the Unicode Consortium
+            unrestricted rights to use, modify, and distribute the images.</li>
+        <li><strong>No third-party material:</strong> no trademarks, logos, branded parts, or
+            third-party images are included.</li>
+        <li><strong>Source:</strong> vector source files are available in the accompanying
+            repository (one SVG module per symbol).</li>
+    </ul>
+
+    <!-- ==================== EVIDENCE OF FREQUENCY ==================== -->
+    <div class="page-break"></div>
+    <h2>📊 4. Evidence of Frequency</h2>
+    <p>
+        Unicode requires evidence that a proposed emoji's concept is <em>frequently used</em>. The
+        following sources are provided as screenshots. Result counts are recorded as captured on the
+        submission date; insert the captured images into each frame before exporting to PDF. The
+        appended <strong>Frequency Proof</strong> table at the end of this document provides ready-built,
+        disambiguated links for every symbol.
+    </p>
+
+    <table class="freq">
+        <thead>
+            <tr><th>Source</th><th>Query</th><th>Signal captured</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Google Search</td><td>"resistor", "capacitor", "circuit diagram"</td><td>Total indexed result count</td></tr>
+            <tr><td>Google Video Search</td><td>"how a transistor works", "logic gates"</td><td>Volume of instructional video content</td></tr>
+            <tr><td>Google Trends — Web Search</td><td>"resistor" + component terms</td><td>Sustained, non-seasonal interest over 5+ years</td></tr>
+            <tr><td>Google Trends — Image Search</td><td>"resistor symbol", "schematic symbols"</td><td>Demand for the <em>glyph</em> specifically, not just the part</td></tr>
+            <tr><td>Google Books Ngram Viewer</td><td>resistor, capacitor, diode, transistor</td><td>Long-run frequency in published English text</td></tr>
+        </tbody>
+    </table>
+
+    <div class="evidence">
+        <div class="shot"><span class="src">📷 Google Search</span><span class="hint">Paste screenshot showing total result counts for component terms.</span></div>
+        <div class="shot"><span class="src">📷 Google Video Search</span><span class="hint">Paste screenshot of video result volume for tutorial queries.</span></div>
+        <div class="shot"><span class="src">📷 Google Trends — Web Search</span><span class="hint">Paste 5-year interest-over-time graph (web).</span></div>
+        <div class="shot"><span class="src">📷 Google Trends — Image Search</span><span class="hint">Paste interest-over-time graph (image search).</span></div>
+        <div class="shot wide"><span class="src">📷 Google Books Ngram Viewer</span><span class="hint">Paste Ngram plot of resistor / capacitor / diode / transistor across the full corpus date range.</span></div>
+    </div>
+
+    <!-- ==================== WHY MISSING ==================== -->
+    <h2>❓ 5. Why Electronics Emoji Are Missing From the Library</h2>
+    <p>
+        The absence of electronics symbols from the emoji library is not a sign of low demand — it is
+        a predictable consequence of <strong>how the emoji set was originally seeded and how it has
+        grown since</strong>. Several compounding factors explain the gap:
+    </p>
+    <ol>
+        <li>
+            <strong>The emoji set inherited a consumer/telecom origin, not a technical one.</strong>
+            The foundational repertoire came from late-1990s Japanese carrier sets (DoCoMo, au,
+            SoftBank) designed for everyday messaging — faces, food, weather, transport. Engineering
+            notation was never in that source corpus, so it never entered the standard at the start
+            and there has been no backfill.
+        </li>
+        <li>
+            <strong>Schematic symbols already had a "good enough" home, so no one petitioned.</strong>
+            Engineers communicate with CAD tools, LaTeX/CircuiTikz, and dedicated schematic
+            editors. Because a working channel already existed, the community never organized the
+            formal proposals that drive emoji additions — unlike many consumer concepts that
+            attracted vocal campaigns.
+        </li>
+        <li>
+            <strong>The proposal pipeline favors broad, immediately legible concepts.</strong>
+            Unicode weighs whether an image is recognizable at 18×18 and whether it reads across
+            cultures. A reviewer can misjudge a resistor zig-zag as "niche," even though the terms
+            rank among the most-searched technical words in the world. This proposal exists
+            specifically to supply the frequency evidence that closes that perception gap.
+        </li>
+        <li>
+            <strong>One-off additions don't fit a notation that is inherently a <em>system</em>.</strong>
+            Emoji are usually proposed one concept at a time. Schematic symbols only become useful
+            as a coordinated <em>set</em> (you cannot draw a circuit with a resistor but no wire,
+            battery, or ground). That mismatch with the one-emoji-at-a-time process has kept the
+            whole family out — which is why this proposal presents them together.
+        </li>
+        <li>
+            <strong>A self-reinforcing absence.</strong> Because no electronics emoji exist, people
+            substitute 🔌⚡🔋🧲 or plain text, generating no usage signal <em>for the missing glyphs
+            themselves</em>. Low apparent demand then justifies continued omission. The frequency
+            data in §4 measures the underlying concepts directly to break that loop.
+        </li>
+    </ol>
+    <blockquote>
+        In short: electronics symbols are missing because the library was born from consumer
+        messaging, the technical community already had tools and never lobbied, the review process
+        under-weights specialist concepts, and a notation that is fundamentally a coordinated system
+        does not fit a one-emoji-at-a-time process. None of these reflect a lack of real-world
+        frequency — only a lack of a proposal. This document is that proposal.
+    </blockquote>
+
+    <!-- ==================== SELECTION FACTORS ==================== -->
+    <h2>✅ 6. Selection Factors Summary</h2>
+    <table class="freq">
+        <tbody>
+            <tr><th>Compatibility</th><td>Renders cleanly at 18×18 and 72×72; monochrome-safe; works in dark and light UI via simple invert.</td></tr>
+            <tr><th>Expected usage level</th><td>High — education (every intro electronics course), maker/STEM communities, engineering chat, documentation.</td></tr>
+            <tr><th>Image distinctiveness</th><td>Each symbol is a long-standardized, unambiguous form (IEC 60617 / ANSI Y32.2).</td></tr>
+            <tr><th>Completeness</th><td>Fills an entire missing domain rather than a single gap; coordinated set enables actual circuit expression.</td></tr>
+            <tr><th>Frequently requested</th><td>Component terms rank highly across Search, Trends, and Ngram (see §4 and the appended proof table).</td></tr>
+        </tbody>
+    </table>
+
+    <h2>⚠️ 7. Factors Against (per Unicode guidance)</h2>
+    <ul>
+        <li><strong>Petitions / frequency only as text:</strong> addressed with multi-source data in §4 and the appended proof table.</li>
+        <li><strong>Overly specific:</strong> mitigated by proposing canonical, universal components rather than specific part numbers.</li>
+        <li><strong>Open-ended set:</strong> the proposal is bounded to a defined, standards-based core set, not an unlimited series.</li>
+    </ul>
+
+    <!-- ==================== APPENDED: PROOF / FREQUENCY LINKS ==================== -->
+    <div class="page-break"></div>
+    <section class="proof">
+        <h2>🔗 8. Frequency Proof — Clarifying Search Links</h2>
+        <p>
+            One row per proposed emoji. Each row pre-builds the five required frequency sources with
+            disambiguation applied, ready to open in a private window and screenshot for §4.
+        </p>
+
+        <div class="notes">
+            <strong>How these links were built (per Unicode guidance)</strong>
+            <ul>
+                <li><strong>Private window.</strong> Open every link in a <em>New Private / Incognito / InPrivate</em> window to minimise search personalisation.</li>
+                <li><strong>Category term added.</strong> Each query is focused with an electronics qualifier (e.g. <code>electrical-switch</code>, <code>battery-cell</code>) so unrelated hits (light switch, biology cell) are filtered out — see the “why” note per phrase.</li>
+                <li><strong>Multiword terms hyphenated.</strong> Spaces become hyphens for Google Search/Video (e.g. <code>variable-resistor</code>) so the whole phrase must match.</li>
+                <li><strong>“elephant” comparator.</strong> Trends &amp; Ngram links compare each term against <code>elephant</code> in the same URL; Search/Video use the baseline <code>elephant</code> links below.</li>
+                <li><strong>Widest range + category.</strong> Trends uses <code>date=all</code> / <code>all_2008</code> and the Computers&nbsp;&amp;&nbsp;Electronics category (<code>cat=5</code>); Ngram uses <code>1500–2019</code>.</li>
+                <li><strong>Result count.</strong> On Google Search/Video, click <em>Tools</em> — the count appears at the far right. Screenshot it.</li>
+            </ul>
+        </div>
+
+        <div class="baseline" id="baseline">
+            <strong>🐘 Baseline “elephant” screenshots:</strong>
+        </div>
+
+        <div class="scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Symbol</th><th>Category</th><th>Search phrase</th>
+                        <th>Google&nbsp;Search</th><th>Google&nbsp;Video</th>
+                        <th>Trends: Web</th><th>Trends: Image</th><th>Books Ngram</th>
+                    </tr>
+                </thead>
+                <tbody id="proof-rows"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <footer>
+        Proposal for Electronics Schematic Symbol Emoji · Submitter: Anthony Kuzub
+        &lt;akuzub@onediversified.com&gt; · 2026-05-31 · Artwork dedicated to the public domain (CC0 1.0).
+        Export to PDF (browser “Print → Save as PDF”, Letter) after inserting the §4 screenshots.
+    </footer>
+
+    <script type="module">
+        import icons from './symbols/index.js';
+
+        // Group icons by category once, preserving first-seen (index.js) order.
+        const order = [];
+        const byCategory = new Map();
+        for (const icon of icons) {
+            if (!byCategory.has(icon.category)) { byCategory.set(icon.category, []); order.push(icon.category); }
+            byCategory.get(icon.category).push(icon);
+        }
+
+        // ---------------- GALLERY (near the top) ----------------
+        // Filename slug from name + colour category. MUST match renderPNG.py's slug().
+        const slug = (name, category) => {
+            let s = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+            if (/colou?r/i.test(category)) s += '-color';
+            return s;
+        };
+
+        const gallery = document.getElementById('gallery');
+        const batches = [
+            { title: 'Emoji — 18 × 18 (PNG)', cls: 'b18',  mode: 'png', folder: '18X18', px: 18 },
+            { title: 'Emoji — 72 × 72 (PNG)', cls: 'b72',  mode: 'png', folder: '72X72', px: 72 },
+            { title: 'SVG — vector source (renders as-is)', cls: 'bsvg', mode: 'svg' }
+        ];
+        for (const batch of batches) {
+            const section = document.createElement('section');
+            section.className = 'batch ' + batch.cls;
+
+            const title = document.createElement('div');
+            title.className = 'batch-title';
+            title.textContent = batch.title;
+            section.appendChild(title);
+
+            for (const category of order) {
+                const heading = document.createElement('h3');
+                heading.className = 'cat';
+                heading.textContent = category;
+                section.appendChild(heading);
+
+                const grid = document.createElement('div');
+                grid.className = 'grid';
+                const sorted = [...byCategory.get(category)].sort((a, b) => a.name.localeCompare(b.name));
+                for (const icon of sorted) {
+                    const card = document.createElement('div');
+                    card.className = 'icon-card';
+                    let visual;
+                    if (batch.mode === 'png') {
+                        const src = `symbols/${batch.folder}/${slug(icon.name, icon.category)}.png`;
+                        if (batch.px === 18) {
+                            // same PNG over three backgrounds: transparency (checker), white, orange
+                            visual = '<div class="swatches">' +
+                                ['checker', 'white', 'orange'].map(bg =>
+                                    `<span class="swatch ${bg}"><img src="${src}" width="18" height="18" alt="${icon.name}" loading="lazy"></span>`
+                                ).join('') + '</div>';
+                        } else {
+                            visual = `<img src="${src}" width="${batch.px}" height="${batch.px}" alt="${icon.name}" loading="lazy">`;
+                        }
+                    } else {
+                        visual = icon.svg;   // vector source, rendered as-is
+                    }
+                    card.innerHTML = visual + '<div>' + icon.name + '</div>';
+                    grid.appendChild(card);
+                }
+                section.appendChild(grid);
+            }
+            gallery.appendChild(section);
+        }
+
+        // ---------------- PROOF (appended frequency links) ----------------
+        // Per-symbol disambiguation, keyed by the exact `name` in each symbol module.
+        const MAP = {
+            'Switch (closed)': { search: 'electrical-switch',    trends: 'electrical switch', why: 'vs. light switch, Nintendo Switch' },
+            'Switch (open)':   { search: 'electrical-switch',    trends: 'electrical switch', why: 'vs. light switch, Nintendo Switch' },
+            'Selector':        { search: 'spdt-switch',          trends: 'SPDT switch',       why: 'single-pole double-throw selector' },
+            'Selected':        { search: 'spdt-switch',          trends: 'SPDT switch',       why: 'SPDT selector thrown to lower contact' },
+            'Cell':            { search: 'battery-cell',         trends: 'battery cell',      why: 'vs. biology cell, prison cell, phone cell' },
+            'Cells':           { search: 'battery-cells',        trends: 'battery cells',     why: 'multiple cells in series; vs. biology cells' },
+            'AC':              { search: 'ac-voltage-source',   trends: 'AC power source',   why: 'qualify "AC"; vs. air conditioner' },
+            'Voltage':         { search: 'voltage-source',      trends: 'voltage source',    why: 'already specific' },
+            'Current':         { search: 'current-source-circuit', trends: 'current source', why: 'vs. current (news/water/river)' },
+            'Resistor':        { search: 'electronics-resistor', trends: 'resistor',          why: 'already specific' },
+            'Capacitor':       { search: 'electronics-capacitor',trends: 'capacitor',         why: 'already specific' },
+            'Inductor':        { search: 'electronics-inductor', trends: 'inductor',          why: 'already specific' },
+            'Wire':            { search: 'electrical-wire',      trends: 'electrical wire',   why: 'vs. news wire, wire transfer' },
+            'Fuse':            { search: 'electrical-fuse',      trends: 'electrical fuse',   why: 'vs. Fuse (band), bomb fuse' },
+            'Breaker':         { search: 'circuit-breaker',      trends: 'circuit breaker',   why: 'already specific' },
+            'Rheostat':        { search: 'rheostat',             trends: 'rheostat',          why: 'variable resistor; already specific' },
+            'Potentiometer':   { search: 'potentiometer',        trends: 'potentiometer',     why: 'already specific' },
+            'Thermistor':      { search: 'thermistor',           trends: 'thermistor',        why: 'already specific' },
+            'Ammeter':         { search: 'ammeter',              trends: 'ammeter',           why: 'already specific' },
+            'Voltmeter':       { search: 'voltmeter',            trends: 'voltmeter',         why: 'already specific' },
+            'Wattmeter':       { search: 'wattmeter',            trends: 'wattmeter',         why: 'already specific' },
+            'Motor':           { search: 'electric-motor',       trends: 'electric motor',    why: 'vs. car motor, Motörhead' },
+            'Diode':           { search: 'diode',                trends: 'diode',             why: 'already specific' },
+            'LED':             { search: 'led-diode',            trends: 'LED light',         why: 'vs. "led" (past tense), Led Zeppelin' },
+            'Zener':           { search: 'zener-diode',          trends: 'zener diode',       why: 'already specific' },
+            'LDR':             { search: 'photoresistor-ldr',    trends: 'photoresistor',     why: 'LDR is an ambiguous acronym' },
+            'Ground':          { search: 'electrical-ground',    trends: 'electrical ground', why: 'vs. ground (soil/floor)' },
+            'Buzzer':          { search: 'electronic-buzzer',    trends: 'electronic buzzer', why: 'vs. door / game-show buzzer' },
+            'Loudspeaker':     { search: 'loudspeaker',          trends: 'loudspeaker',       why: 'already specific' },
+            'Lamp':            { search: 'circuit-lamp',          trends: 'circuit lamp',      why: 'vs. lamp (furniture)' },
+            'TransistorN':     { search: 'npn-transistor',        trends: 'NPN transistor',    why: 'bipolar junction transistor (NPN)' },
+            'TransistorP':     { search: 'pnp-transistor',        trends: 'PNP transistor',    why: 'bipolar junction transistor (PNP)' },
+            'FETN':            { search: 'n-channel-mosfet',      trends: 'NMOS',              why: 'n-channel MOSFET' },
+            'FETP':            { search: 'p-channel-mosfet',      trends: 'PMOS',              why: 'p-channel MOSFET' },
+            'JFETN':           { search: 'n-channel-jfet',        trends: 'JFET',              why: 'n-channel junction FET' },
+            'JFETP':           { search: 'p-channel-jfet',        trends: 'JFET',              why: 'p-channel junction FET' },
+            'Op-Amp':          { search: 'op-amp-circuit',        trends: 'op-amp',            why: 'operational amplifier' },
+            'Antenna':         { search: 'radio-antenna',         trends: 'radio antenna',     why: 'vs. insect antenna' },
+            'Transformer':     { search: 'electrical-transformer',trends: 'electrical transformer', why: 'vs. Transformers (movie/toys)' },
+            'AND':  { search: 'logic-gate-and',  trends: 'AND gate',  why: 'bare "and" is a conjunction' },
+            'OR':   { search: 'logic-gate-or',   trends: 'OR gate',   why: 'bare "or" is a conjunction' },
+            'NOT':  { search: 'logic-gate-not',  trends: 'NOT gate',  why: 'bare "not" is a negation' },
+            'NAND': { search: 'logic-gate-nand', trends: 'NAND gate', why: 'qualify as a gate' },
+            'NOR':  { search: 'logic-gate-nor',  trends: 'NOR gate',  why: 'bare "nor" is a conjunction' },
+            'XOR':  { search: 'logic-gate-xor',  trends: 'XOR gate',  why: 'qualify as a gate' },
+            'XNOR': { search: 'logic-gate-xnor', trends: 'XNOR gate', why: 'qualify as a gate' }
+        };
+
+        const gSearch = q => `https://www.google.com/search?q=${encodeURIComponent(q)}`;
+        const gVideo  = q => `https://www.google.com/search?tbm=vid&q=${encodeURIComponent(q)}`;
+        const tWeb    = t => `https://trends.google.com/trends/explore?date=all&cat=5&q=${encodeURIComponent(t + ',elephant')}`;
+        const tImg    = t => `https://trends.google.com/trends/explore?date=all_2008&gprop=images&cat=5&q=${encodeURIComponent(t + ',elephant')}`;
+        const ngram   = t => `https://books.google.com/ngrams/graph?content=${encodeURIComponent(t)}%2Celephant&year_start=1500&year_end=2019&corpus=en-2019&smoothing=3`;
+
+        // Baseline elephant links (Search & Video take no in-URL comparator)
+        const baseline = document.getElementById('baseline');
+        for (const [label, url] of [['Google Search', gSearch('elephant')], ['Google Video', gVideo('elephant')]]) {
+            const a = document.createElement('a');
+            a.className = 'lk'; a.href = url; a.target = '_blank'; a.rel = 'noopener';
+            a.textContent = label;
+            baseline.appendChild(a);
+        }
+
+        const rows = document.getElementById('proof-rows');
+        const link = (url, text) => {
+            const a = document.createElement('a');
+            a.className = 'lk'; a.href = url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = text;
+            const td = document.createElement('td'); td.appendChild(a); return td;
+        };
+
+        for (const category of order) {
+            if (category.includes('Colour')) continue;
+            const catRow = document.createElement('tr');
+            catRow.className = 'cat-row';
+            const catCell = document.createElement('td');
+            catCell.colSpan = 8; catCell.textContent = category;
+            catRow.appendChild(catCell); rows.appendChild(catRow);
+
+            const sorted = [...byCategory.get(category)].sort((a, b) => a.name.localeCompare(b.name));
+            for (const icon of sorted) {
+                const d = MAP[icon.name] || { search: icon.name.toLowerCase(), trends: icon.name.toLowerCase(), why: '' };
+                const tr = document.createElement('tr');
+
+                const symTd = document.createElement('td');
+                symTd.innerHTML = `<div class="sym">${icon.svg}<span class="nm">${icon.name}</span></div>`;
+                tr.appendChild(symTd);
+
+                const catTd = document.createElement('td');
+                catTd.className = 'cat'; catTd.textContent = icon.category;
+                tr.appendChild(catTd);
+
+                const qTd = document.createElement('td');
+                qTd.className = 'query';
+                qTd.innerHTML = `<code>[${d.search}]</code>` + (d.why ? `<span class="why">${d.why}</span>` : '');
+                tr.appendChild(qTd);
+
+                tr.appendChild(link(gSearch(d.search), 'Search'));
+                tr.appendChild(link(gVideo(d.search),  'Video'));
+                tr.appendChild(link(tWeb(d.trends),    'Trends · Web'));
+                tr.appendChild(link(tImg(d.trends),    'Trends · Image'));
+                tr.appendChild(link(ngram(d.trends),   'Ngram'));
+
+                rows.appendChild(tr);
+            }
+        }
+    </script>
+
+</body>
+</html>

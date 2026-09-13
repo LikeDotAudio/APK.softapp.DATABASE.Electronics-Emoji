@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frequency Proof — Clarifying Search Links</title>
+<style>
+    :root {
+        --bg:#0d1117; --panel:#161b22; --line:#30363d; --ink:#e6edf3;
+        --muted:#8b949e; --accent:#58a6ff; --warn:#d29922;
+    }
+    * { box-sizing: border-box; }
+    body {
+        font-family: -apple-system, system-ui, "Segoe UI", sans-serif;
+        background: var(--bg); color: var(--ink);
+        margin: 0; padding: 28px 32px 80px; line-height: 1.5;
+    }
+    h1 { margin: 0 0 4px; font-size: 1.7em; }
+    .lede { color: var(--muted); margin: 0 0 18px; max-width: 70ch; }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ---- Guidance / legend ---- */
+    .notes {
+        background: var(--panel); border: 1px solid var(--line);
+        border-radius: 8px; padding: 14px 18px; margin: 0 0 22px; max-width: 90ch;
+    }
+    .notes h2 { font-size: 1.05em; margin: 0 0 8px; }
+    .notes ul { margin: 6px 0 0; padding-left: 20px; }
+    .notes li { margin: 4px 0; color: var(--muted); }
+    .notes code { background:#010409; color:#e6edf3; padding:1px 5px; border-radius:4px; font-size:0.9em; }
+
+    .baseline {
+        background: #1c2230; border: 1px solid var(--line);
+        border-radius: 8px; padding: 12px 18px; margin: 0 0 22px;
+        display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+    }
+    .baseline strong { color: var(--warn); }
+
+    /* ---- Table ---- */
+    .scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+    table { border-collapse: collapse; width: 100%; min-width: 1000px; }
+    thead th {
+        position: sticky; top: 0; background: #1f2733; color: var(--ink);
+        text-align: left; font-size: 0.78em; text-transform: uppercase;
+        letter-spacing: 0.04em; padding: 10px 12px; border-bottom: 2px solid var(--accent);
+        white-space: nowrap;
+    }
+    tbody td { padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; font-size: 0.92em; }
+    tbody tr:hover { background: #11161d; }
+
+    .sym { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+    .sym svg { width: 34px; height: 34px; background:#fff; border-radius: 4px; flex: none; }
+    /* Base symbols are black-on-transparent: invert => white-on-black tile.
+       Colour variants carry an accent colour, so they render un-inverted on white. */
+    .sym.bw svg { filter: invert(1); }
+    .sym .nm { font-weight: 600; }
+
+    .cat { color: var(--muted); font-size: 0.85em; white-space: nowrap; }
+
+    .query code { background:#010409; padding: 2px 6px; border-radius: 4px; font-size: 0.86em; white-space: nowrap; }
+    .query .why { display:block; color: var(--muted); font-size: 0.78em; margin-top: 4px; max-width: 26ch; }
+
+    .lk { white-space: nowrap; }
+    .lk::before { content: "↗ "; color: var(--muted); }
+
+    .cat-row td {
+        background: #1a2030; color: var(--accent); font-weight: 700;
+        text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.8em;
+    }
+    footer { margin-top: 26px; color: var(--muted); font-size: 0.82em; max-width: 80ch; }
+</style>
+</head>
+<body>
+    <h1>🔗 Frequency Proof — Clarifying Search Links</h1>
+    <p class="lede">
+        One row per proposed emoji from <code>index.htm</code>. Each row pre-builds the five required
+        frequency sources with disambiguation applied, ready to open in a private window and screenshot
+        for the proposal's <em>Evidence of Frequency</em> section.
+    </p>
+
+    <div class="notes">
+        <h2>🛠️ How these links were built (per Unicode guidance)</h2>
+        <ul>
+            <li><strong>Private window.</strong> Open every link in a <em>New Private / Incognito / InPrivate</em> window to minimise search personalisation.</li>
+            <li><strong>Category term added.</strong> Each query is focused with an electronics qualifier (e.g. <code>electrical-switch</code>, <code>battery-cell</code>) so unrelated hits (light switch, biology cell) are filtered out — see the “why” note under each phrase.</li>
+            <li><strong>Multiword terms hyphenated.</strong> Spaces are replaced with hyphens for Google Search/Video (e.g. <code>variable-resistor</code>) so results require the whole phrase, not scattered words.</li>
+            <li><strong>“elephant” comparator.</strong> Google Trends &amp; Ngram links compare each term against <code>elephant</code> in the same URL; Google Search/Video use the baseline <code>elephant</code> screenshots below.</li>
+            <li><strong>Widest range + category.</strong> Trends links use <code>date=all</code> (web) / <code>all_2008</code> (image) and the <em>Computers &amp; Electronics</em> category (<code>cat=5</code>); Ngram uses <code>1500–2019</code>.</li>
+            <li><strong>Result count.</strong> On Google Search/Video, click <em>Tools</em> — the result count appears at the far right. Screenshot it.</li>
+        </ul>
+    </div>
+
+    <div class="baseline" id="baseline">
+        <strong>🐘 Baseline “elephant” screenshots:</strong>
+        <!-- filled by script -->
+    </div>
+
+    <div class="scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Category</th>
+                    <th>Search phrase</th>
+                    <th>Google&nbsp;Search</th>
+                    <th>Google&nbsp;Video</th>
+                    <th>Trends: Web</th>
+                    <th>Trends: Image</th>
+                    <th>Books Ngram</th>
+                </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+        </table>
+    </div>
+
+    <footer>
+        Links open Google properties directly. Result counts and graphs are not embedded — capture each
+        as a screenshot per Unicode submission rules. Comparator term: <code>elephant</code>. Trends category:
+        Computers&nbsp;&amp;&nbsp;Electronics (cat=5). Ranges set to the widest available.
+    </footer>
+
+    <script type="module">
+        import icons from './symbols/index.js';
+
+        // --- Per-symbol disambiguation. Keyed by the exact `name` in each symbol module. ---
+        // search : hyphenated phrase for Google Search/Video (category term + core, multiword joined by '-')
+        // trends : phrase used for Trends + Ngram (compared against 'elephant'); a real searchable phrase
+        // why    : the ambiguity the category term is removing
+        // Keyed by the exact `name` in each module. Colour variants share the
+        // base name, so they reuse the same disambiguation automatically.
+        const MAP = {
+            'Switch (closed)': { search: 'electrical-switch',     trends: 'electrical switch',     why: 'vs. light switch, Nintendo Switch' },
+            'Switch (open)':   { search: 'electrical-switch',     trends: 'electrical switch',     why: 'vs. light switch, Nintendo Switch' },
+            'Selector':        { search: 'selector-switch',       trends: 'selector switch',       why: 'SPDT/rotary; vs. CSS selector' },
+            'Selected':        { search: 'selector-switch',       trends: 'selector switch',       why: 'changeover-switch position; vs. CSS selector' },
+            'Cell':            { search: 'battery-cell',          trends: 'battery cell',          why: 'vs. biology cell, prison cell' },
+            'Cells':           { search: 'battery-cells',         trends: 'battery',               why: 'multi-cell battery; vs. assault & battery' },
+            'AC':              { search: 'ac-power-source',       trends: 'alternating current',   why: 'vs. air conditioning, AC/DC (band)' },
+            'Voltage':         { search: 'voltage-source',        trends: 'voltage source',        why: 'vs. generic "voltage"' },
+            'Current':         { search: 'current-source',        trends: 'current source',        why: 'vs. river current, present time' },
+            'Resistor':        { search: 'electronics-resistor',  trends: 'resistor',              why: 'already specific' },
+            'Capacitor':       { search: 'electronics-capacitor', trends: 'capacitor',             why: 'already specific' },
+            'Inductor':        { search: 'electronics-inductor',  trends: 'inductor',              why: 'already specific' },
+            'Wire':            { search: 'electrical-wire',       trends: 'electrical wire',       why: 'vs. news wire, wire transfer' },
+            'Fuse':            { search: 'electrical-fuse',       trends: 'electrical fuse',       why: 'vs. Fuse (band), bomb fuse' },
+            'Rheostat':        { search: 'rheostat',              trends: 'rheostat',              why: 'already specific (variable resistor)' },
+            'Potentiometer':   { search: 'potentiometer',         trends: 'potentiometer',         why: 'already specific' },
+            'Thermistor':      { search: 'thermistor',            trends: 'thermistor',            why: 'already specific' },
+            'Ammeter':         { search: 'ammeter',               trends: 'ammeter',               why: 'already specific' },
+            'Voltmeter':       { search: 'voltmeter',             trends: 'voltmeter',             why: 'already specific' },
+            'Wattmeter':       { search: 'wattmeter',             trends: 'wattmeter',             why: 'already specific' },
+            'Motor':           { search: 'electric-motor',        trends: 'electric motor',        why: 'vs. car motor, Motörhead' },
+            'Diode':           { search: 'diode',                 trends: 'diode',                 why: 'already specific' },
+            'LED':             { search: 'led-diode',             trends: 'LED',                   why: 'vs. Led Zeppelin, "led" (lead)' },
+            'Zener':           { search: 'zener-diode',           trends: 'zener diode',           why: 'already specific' },
+            'LDR':             { search: 'photoresistor-ldr',     trends: 'photoresistor',         why: 'LDR is an ambiguous acronym' },
+            'Ground':          { search: 'electrical-ground',     trends: 'electrical ground',     why: 'vs. ground (soil/floor)' },
+            'Buzzer':          { search: 'electronic-buzzer',     trends: 'electronic buzzer',     why: 'vs. door / game-show buzzer' },
+            'Lamp':            { search: 'circuit-lamp',          trends: 'circuit lamp',          why: 'vs. lamp (furniture)' },
+            'TransistorN':     { search: 'npn-transistor',        trends: 'NPN transistor',        why: 'specify NPN polarity' },
+            'TransistorP':     { search: 'pnp-transistor',        trends: 'PNP transistor',        why: 'specify PNP polarity' },
+            'FETN':            { search: 'n-channel-mosfet',      trends: 'MOSFET',                why: 'FET acronym; n-channel' },
+            'FETP':            { search: 'p-channel-mosfet',      trends: 'MOSFET',                why: 'FET acronym; p-channel' },
+            'JFETN':           { search: 'n-channel-jfet',        trends: 'JFET',                  why: 'junction FET; n-channel' },
+            'JFETP':           { search: 'p-channel-jfet',        trends: 'JFET',                  why: 'junction FET; p-channel' },
+            'Op-Amp':          { search: 'operational-amplifier', trends: 'operational amplifier', why: 'op-amp; already specific' },
+            'Antenna':         { search: 'radio-antenna',         trends: 'radio antenna',         why: 'vs. insect antenna' },
+            'Transformer':     { search: 'electrical-transformer',trends: 'electrical transformer',why: 'vs. Transformers (movie/toys)' },
+            'AND':  { search: 'logic-gate-and',  trends: 'AND gate',  why: 'bare "and" is a conjunction' },
+            'OR':   { search: 'logic-gate-or',   trends: 'OR gate',   why: 'bare "or" is a conjunction' },
+            'NOT':  { search: 'logic-gate-not',  trends: 'NOT gate',  why: 'bare "not" is a negation' },
+            'NAND': { search: 'logic-gate-nand', trends: 'NAND gate', why: 'qualify as a gate' },
+            'NOR':  { search: 'logic-gate-nor',  trends: 'NOR gate',  why: 'bare "nor" is a conjunction' },
+            'XOR':  { search: 'logic-gate-xor',  trends: 'XOR gate',  why: 'qualify as a gate' },
+            'XNOR': { search: 'logic-gate-xnor', trends: 'XNOR gate', why: 'qualify as a gate' }
+        };
+
+        // --- URL builders (all per the required Unicode formats) ---
+        const gSearch = q => `https://www.google.com/search?q=${encodeURIComponent(q)}`;
+        const gVideo  = q => `https://www.google.com/search?tbm=vid&q=${encodeURIComponent(q)}`;
+        const tWeb    = t => `https://trends.google.com/trends/explore?date=all&cat=5&q=${encodeURIComponent(t + ',elephant')}`;
+        const tImg    = t => `https://trends.google.com/trends/explore?date=all_2008&gprop=images&cat=5&q=${encodeURIComponent(t + ',elephant')}`;
+        const ngram   = t => `https://books.google.com/ngrams/graph?content=${encodeURIComponent(t)}%2Celephant&year_start=1500&year_end=2019&corpus=en-2019&smoothing=3`;
+
+        // --- Baseline elephant links (for Google Search & Video, which take no in-URL comparator) ---
+        const baseline = document.getElementById('baseline');
+        for (const [label, url] of [
+            ['Google Search', gSearch('elephant')],
+            ['Google Video',  gVideo('elephant')]
+        ]) {
+            const a = document.createElement('a');
+            a.className = 'lk'; a.href = url; a.target = '_blank'; a.rel = 'noopener';
+            a.textContent = label;
+            baseline.appendChild(a);
+        }
+
+        // --- Build the table, grouped by category in index.js order ---
+        const rows = document.getElementById('rows');
+        let lastCat = null;
+
+        const link = (url, text) => {
+            const a = document.createElement('a');
+            a.className = 'lk'; a.href = url; a.target = '_blank'; a.rel = 'noopener';
+            a.textContent = text;
+            const td = document.createElement('td');
+            td.appendChild(a);
+            return td;
+        };
+
+        for (const icon of icons) {
+            if (icon.category !== lastCat) {
+                lastCat = icon.category;
+                const tr = document.createElement('tr');
+                tr.className = 'cat-row';
+                const td = document.createElement('td');
+                td.colSpan = 8;
+                td.textContent = icon.category;
+                tr.appendChild(td);
+                rows.appendChild(tr);
+            }
+
+            const d = MAP[icon.name] || { search: icon.name.toLowerCase(), trends: icon.name.toLowerCase(), why: '' };
+            const tr = document.createElement('tr');
+
+            // Symbol cell — invert base symbols (white-on-black); leave colour variants as-is.
+            const symTd = document.createElement('td');
+            const symClass = icon.category.includes('Colour') ? 'sym' : 'sym bw';
+            symTd.innerHTML = `<div class="${symClass}">${icon.svg}<span class="nm">${icon.name}</span></div>`;
+            tr.appendChild(symTd);
+
+            // Category cell
+            const catTd = document.createElement('td');
+            catTd.className = 'cat';
+            catTd.textContent = icon.category;
+            tr.appendChild(catTd);
+
+            // Search-phrase cell
+            const qTd = document.createElement('td');
+            qTd.className = 'query';
+            qTd.innerHTML = `<code>[${d.search}]</code>` + (d.why ? `<span class="why">${d.why}</span>` : '');
+            tr.appendChild(qTd);
+
+            // Five source links
+            tr.appendChild(link(gSearch(d.search), 'Search'));
+            tr.appendChild(link(gVideo(d.search),  'Video'));
+            tr.appendChild(link(tWeb(d.trends),    'Trends · Web'));
+            tr.appendChild(link(tImg(d.trends),    'Trends · Image'));
+            tr.appendChild(link(ngram(d.trends),   'Ngram'));
+
+            rows.appendChild(tr);
+        }
+    </script>
+</body>
+</html>
