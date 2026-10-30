@@ -13,4 +13,4 @@ Is `DATABASE.Electronics-Emoji` deployed? Written by `.apk.scripts/smoke.py` fro
 
 Re-run: `python3 .apk.scripts/smoke.py PODS/POD.THIN/Softapps/DATABASE/DATABASE.Electronics-Emoji`
 
-<!-- smoke:sig 071dcc796031 since 2026-10-30 12:51 EDT -->
+<!-- smoke:sig e90a10e323d7 since 2026-10-30 12:51 EDT -->
