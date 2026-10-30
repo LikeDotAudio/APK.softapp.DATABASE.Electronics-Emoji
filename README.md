@@ -31,11 +31,11 @@
 ---
 
 ## 🚀 Usage & Integration
-* **View**: `python3 server.py`, which serves this folder on `http://127.0.0.1:8080/` and opens `index.html` (the proposal); go to `/gallery.htm` for the lookup. **HTTP is required**: both pages `import` `symbols/index.js` as an ES module, and from `file://` they show an empty grid and no error.
-* **If 8080 is taken**: `server.py` fetches `symbols/index.js` from whoever holds the port. If the bytes match, that is this server already running and it opens the URL and exits 0; otherwise it prints that the port belongs to something else and exits 1. It never kills the holder. On the bench, `:8080` is normally the Storage-Portal, so expect exit 1 there and change `PORT` in `server.py`.
+* **View**: `python3 server.py`, which serves this folder on `http://127.0.0.1:8093/` (override with `APK_EMOJI_PORT`) and opens `gallery.htm`, the lookup; the proposal is `/index.html`. **HTTP is required**: both pages `import` `symbols/index.js` as an ES module, and from `file://` they show an empty grid and no error.
+* **If the port is taken**: `server.py` fetches `symbols/index.js` from whoever holds the port. If the bytes match, that is this server already running and it opens the URL and exits 0; otherwise it prints that the port belongs to something else and exits 1. It never kills the holder. (The default was `8080` until 2026-10-30, which is Storage-Portal's port on every node, so it always exited 1.)
 * **Re-render PNGs** after editing a symbol: `pip install --user cairosvg Pillow` (and the system Cairo library), then `python3 renderPNG.py`. It warns on a slug collision.
 * **Tests**: none.
-* **Web Portal Entry**: `display.json` → `kind: "web"`, `app: "gallery.htm"`, id `ElectronicsEmoji`. The Softapps walker (`PODS/POD.THIN/WEB.OsApi/SRC/server.py`, `walk_project()`) picks `index.html` first by its entry-marker order, so a walker launch opens the proposal, not the gallery. Inside the portal the pages are served over HTTP, so the module import works there.
+* **Web Portal Entry**: `display.json` → `kind: "web"`, `entry` and `app` both `gallery.htm`, id `ElectronicsEmoji`. The Softapps walker (`PODS/POD.THIN/WEB.OsApi/SRC/server.py`, `walk_project()`) honours a declared `entry` before its `index.html` marker, so a launch opens the gallery. Inside the portal the pages are served over HTTP, so the module import works there.
 * **MQTT**: none. `display.json` names `APK.audio/Gui/Display/ElectronicsEmoji` as its display topic; nothing publishes or subscribes.
 * **Remote Repository**: `https://github.com/LikeDotAudio/APK.softapp.DATABASE.Electronics-Emoji.git`
 
@@ -51,6 +51,9 @@ What the code actually does, in the ecosystem's vocabulary (`Documentation/🏛P
 * **Accessible by construction.** Inline SVG tiles carry `role="img"` and an `aria-label`, and the visible caption is `aria-hidden` so nothing is announced twice (`gallery.htm`).
 * **Fail loudly on a missing tool.** `renderPNG.py` exits with an install line when `cairosvg` or `Pillow` is missing.
 * **Evidence over assertion.** The proposal's frequency claims link to searches you can run, with the ambiguity of each plain word stated (`proof.htm`).
+
+## 📚 Wiki
+Principles with code anchors, architecture and delivery: [Documentation/README.md](Documentation/README.md).
 
 ## 🛣 Plans
 Plans live only in `Documentation/🛣Roadmap/roadmap.htm` at the APK.audio root.
