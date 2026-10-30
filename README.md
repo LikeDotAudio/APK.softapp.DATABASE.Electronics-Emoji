@@ -35,7 +35,7 @@
 * **If the port is taken**: `server.py` fetches `symbols/index.js` from whoever holds the port. If the bytes match, that is this server already running and it opens the URL and exits 0; otherwise it prints that the port belongs to something else and exits 1. It never kills the holder. (The default was `8080` until 2026-10-30, which is Storage-Portal's port on every node, so it always exited 1.)
 * **Re-render PNGs** after editing a symbol: `pip install --user cairosvg Pillow` (and the system Cairo library), then `python3 renderPNG.py`. It warns on a slug collision.
 * **Tests**: none.
-* **Web Portal Entry**: `display.json` → `kind: "web"`, `entry` and `app` both `gallery.htm`, id `ElectronicsEmoji`. The Softapps walker (`PODS/POD.THIN/WEB.OsApi/SRC/server.py`, `walk_project()`) honours a declared `entry` before its `index.html` marker, so a launch opens the gallery. Inside the portal the pages are served over HTTP, so the module import works there.
+* **Web Portal Entry**: `display.json` → `kind: "web"`, `entry` `gallery.htm` and `app` its portal path `APK:Softapps/DATABASE/DATABASE.Electronics-Emoji/gallery.htm`, id `ElectronicsEmoji`. The Softapps walker (`PODS/POD.THIN/WEB.OsApi/SRC/server.py`, `walk_project()`) honours a declared `entry` before its `index.html` marker, so a launch opens the gallery. Inside the portal the pages are served over HTTP, so the module import works there.
 * **MQTT**: none. `display.json` names `APK.audio/Gui/Display/ElectronicsEmoji` as its display topic; nothing publishes or subscribes.
 * **Remote Repository**: `https://github.com/LikeDotAudio/APK.softapp.DATABASE.Electronics-Emoji.git`
 
