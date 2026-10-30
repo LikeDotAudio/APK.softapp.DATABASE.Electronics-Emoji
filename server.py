@@ -2,7 +2,7 @@
 # MIT Licence. Free, for everyone, for ever. Full text in LICENSE at the root.
 """server.py — the local HTTP door to the Electronics Emoji symbol set.
 
-Serves this folder on PORT and opens a browser at index.html. It owns nothing
+Serves this folder on PORT and opens a browser at gallery.htm, the symbol lookup. It owns nothing
 but that: no build, no render, no state. renderPNG.py makes the PNGs.
 
 HTTP IS NOT OPTIONAL. index.html and gallery.htm import symbols/index.js as an
@@ -24,7 +24,11 @@ import os
 import urllib.request
 import webbrowser
 
-PORT = 8080
+# NOT 8080. That is Storage-Portal's port on every APK.audio node (DATABASE.server.SQL),
+# so the old default always met an incumbent that was not this server and exited 1.
+# 8093 is claimed by nothing in the tree (grep of PODS/ and .apk.scripts/, 2026-10-30);
+# APK_EMOJI_PORT overrides it for a bench where it is taken.
+PORT = int(os.environ.get("APK_EMOJI_PORT", "8093"))
 BIND = "127.0.0.1"
 DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 
@@ -32,6 +36,7 @@ DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 # to ask. Serving the same bytes at the same path is the strongest statement a
 # plain file server can make about which tree it is standing on.
 IDENTITY = "symbols/index.js"
+ENTRY = "gallery.htm"  # the same page display.json names as its entry
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     index_pages = ("index.html", "index.htm")
@@ -77,7 +82,7 @@ def _defer_to_incumbent(bind, port, url, err):
         print(f"⛔ Port {port} on {bind} is held by something that is not the "
               f"Electronics Emoji server.")
         print(f"   {err}")
-        print(f"   Free it, or edit PORT in this file to {port + 1}.")
+        print(f"   Free it, or run with APK_EMOJI_PORT={port + 1}.")
         return 1
     print(f"⚡ The Electronics Emoji server is already serving — {url}")
     print(f"   It is serving this same {IDENTITY}. Nothing to do.")
@@ -86,7 +91,8 @@ def _defer_to_incumbent(bind, port, url, err):
 
 
 def run():
-    url = f"http://localhost:{PORT}/index.html"
+    # The door most visitors want; index.html is the letter-paper proposal.
+    url = f"http://localhost:{PORT}/{ENTRY}"
     # Without this a restart inside the TIME_WAIT window fails on a port nothing
     # is listening on, which reads as another server still running and sends a
     # person hunting a process that is gone. It is also what makes EADDRINUSE
