@@ -27,13 +27,13 @@ from the icon object it imports:
     "Ammeter"         / Colour Variants        -> ammeter-color
     "AND"             / Logic Gates (Colour)   -> and-color
 
-Keep this slug rule in sync with the `slug()` function in index.html.
+The slug rule and the module parser live in symbols_contract.py (its browser
+twin is symbols/slug.js); check.py proves the two agree.
 
 Dependency: cairosvg  (pip install cairosvg)
 Run:        python3 renderPNG.py
 """
 
-import re
 import sys
 from pathlib import Path
 
@@ -52,9 +52,8 @@ except ImportError:
     sys.exit("Missing dependency 'Pillow'. Install with: pip install Pillow")
 
 # ---- Configuration -------------------------------------------------------
-SCRIPT_DIR  = Path(__file__).resolve().parent
-SYMBOLS_DIRECTORY = SCRIPT_DIR / "symbols"
-SIZES       = {"18X18": 18, "72X72": 72}   # folder name -> pixel size
+from symbols_contract import SIZES, SYMBOLS_DIRECTORY, module_files, parse, slug
+
 BACKGROUND  = None                          # None = transparent; or e.g. "#000000"
 
 # Tiny sizes look washed-out because thin strokes anti-alias to faint grey.
@@ -62,33 +61,6 @@ BACKGROUND  = None                          # None = transparent; or e.g. "#0000
 # (each symbol keeps its colour; only the soft semi-transparent edges go away).
 CRISP_SIZES  = {"18X18"}
 ALPHA_CUTOFF = 80                           # alpha >= cutoff -> opaque, else transparent
-
-SVG_RE  = re.compile(r"<svg.*?</svg>", re.DOTALL)
-NAME_RE = re.compile(r'name:\s*"([^"]*)"')
-CAT_RE  = re.compile(r'category:\s*"([^"]*)"')
-
-
-def slug(name: str, category: str) -> str:
-    """Stable filename slug from name + colour category. Mirrors index.html."""
-    s = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
-    if "colour" in category.lower() or "color" in category.lower():
-        s += "-color"
-    return s
-
-
-def parse(js_path: Path):
-    """Return (svg, name, category) from a symbol module, or None if no svg."""
-    text = js_path.read_text(encoding="utf-8")
-    svg = SVG_RE.search(text)
-    if not svg:
-        return None
-    name = NAME_RE.search(text)
-    cat = CAT_RE.search(text)
-    return (
-        svg.group(0),
-        name.group(1) if name else js_path.stem,
-        cat.group(1) if cat else "",
-    )
 
 
 def main() -> int:
@@ -102,15 +74,15 @@ def main() -> int:
         for old in out_dir.glob("*.png"):
             old.unlink()
 
-    js_files = sorted(p for p in SYMBOLS_DIRECTORY.glob("*.js") if p.name != "index.js")
+    js_files = module_files()
 
     rendered, skipped, seen = 0, [], {}
     for js in js_files:
-        parsed = parse(js)
-        if not parsed:
+        svg, name, category = parse(js)
+        if not svg:
             skipped.append(js.name)
             continue
-        svg, name, category = parsed
+        name, category = name or js.stem, category or ""
         sl = slug(name, category)
 
         if sl in seen:

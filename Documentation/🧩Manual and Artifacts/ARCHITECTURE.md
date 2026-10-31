@@ -18,13 +18,16 @@ symbols/<name>.js  ──►  symbols/index.js (ordered array of 81)
   (lookup, 3 sizes)  (letter-paper proposal)  (parse svg → PNG 18 px / 72 px)
 ```
 - A module is `export default { name, category, svg }`. Categories: *Primitive Components* (40), *Logic Gates* (7), *Colour Variants* (27), *Logic Gates (Colour)* (7).
-- `renderPNG.py` reads each module's text (it does not run JS), rasterises with `cairosvg`, and names the file by `slug(name, category)`; it warns on a slug collision.
+- `renderPNG.py` reads each module's text (it does not run JS) through `symbols_contract.parse()`, rasterises with `cairosvg`, and names the file by `symbols_contract.slug(name, category)`; it warns on a slug collision. `index.html` computes the same path with `symbols/slug.js`.
+- `check.py` proves the set consistent (module shape, closed categories, index completeness, `version`, unique slugs, PNG set, JS == Python slug via `node`).
 - `server.py` is a `ThreadingHTTPServer` over this folder bound to `127.0.0.1`. On `EADDRINUSE` it probes the holder for `symbols/index.js`: same bytes → open the URL and exit 0; different → print and exit 1.
 
 ## Files
 | File | Role |
 |---|---|
-| `symbols/*.js`, `symbols/index.js` | the symbol modules and their ordered index |
+| `symbols/*.js`, `symbols/index.js` | the symbol modules and their ordered index (`export const version`) |
+| `symbols/slug.js`, `symbols_contract.py` | the slug rule (browser / Python twins) and the module contract |
+| `check.py` | the contract check, `python3 check.py` |
 | `symbols/18X18/`, `symbols/72X72/` | rendered PNGs (81 each) |
 | `gallery.htm` | the lookup (launcher entry) |
 | `index.html` | the Unicode proposal, `@page { size: letter }` |

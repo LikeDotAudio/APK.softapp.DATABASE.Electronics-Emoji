@@ -453,6 +453,7 @@
 
     <script type="module">
         import icons from './symbols/index.js';
+        import { slug } from './symbols/slug.js';
 
         // Group icons by category once, preserving first-seen (index.js) order.
         const order = [];
@@ -463,12 +464,8 @@
         }
 
         // ---------------- GALLERY (near the top) ----------------
-        // Filename slug from name + colour category. MUST match renderPNG.py's slug().
-        const slug = (name, category) => {
-            let s = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-            if (/colou?r/i.test(category)) s += '-color';
-            return s;
-        };
+        // PNG filename slug: one rule, symbols/slug.js (check.py tests it against
+        // the Python twin renderPNG.py writes with).
 
         const gallery = document.getElementById('gallery');
         const batches = [

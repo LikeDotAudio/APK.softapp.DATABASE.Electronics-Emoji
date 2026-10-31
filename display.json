@@ -8,7 +8,6 @@
   "entry": "gallery.htm",
   "class": "artifact",
   "description": "EVENT: SYMBOLS — 81 schematic symbol modules and their 18px and 72px renders, plus the proposal arguing them into Unicode. Two doors: gallery.htm is the lookup, index.html is the paper, and index.html is laid out for letter paper rather than a screen. The modules are ES modules, so both doors need server.py running — a file:// open shows an empty grid and no error.",
-  "topic": "APK.audio/Gui/Display/ElectronicsEmoji",
   "autostart": false,
   "app": "APK:Softapps/DATABASE/DATABASE.Electronics-Emoji/gallery.htm"
 }

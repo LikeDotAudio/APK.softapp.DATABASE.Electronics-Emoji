@@ -3,6 +3,11 @@
 // Aggregates every icon module into a single ordered list.
 // Each icon lives in its own file (e.g. ./resistor.js) and exports a default
 // object: { name, category, svg }.
+// `version` names the set for a consumer (CAD / Schematics) to pin. Bump it on
+// any change a consumer can see: minor for an added symbol, MAJOR for a rename
+// or removal (the PNG filename is the slug of name + category, so a rename moves
+// the file). Note each bump in README "Versions".
+export const version = '1.0.0';
 import switchClosed from './switch-closed.js';
 import switchOpen from './switch-open.js';
 import selector from './selector.js';

@@ -23,10 +23,20 @@
 | `proof.htm` | "Frequency Proof": per symbol, a disambiguated search phrase (e.g. `electrical-switch`, not "switch") with Google Search / Trends / Ngram links, and why the plain word would mislead. |
 | `server.py` | Local static server for this folder. |
 | `renderPNG.py` | Rasterises every module's SVG to both PNG sizes. |
+| `symbols_contract.py`, `symbols/slug.js` | The module contract (closed category set, parser) and the slug rule — Python twin and browser twin. |
+| `check.py` | `python3 check.py` — the contract check (below); exit 1 on drift. |
 | `display.json` | Manifest for the OS application walker. |
 
 ### PNG names
-`slug = name lower-cased, non-alphanumerics → "-", trimmed`, plus `-color` when the category says colour/color — `Switch (closed)` → `switch-closed.png`, `AND` in *Logic Gates (Colour)* → `and-color.png`. The rule is in `renderPNG.py` (`slug()`) and must match `slug()` in `index.html`. Checked 2026-10-30: the 81 slugs `renderPNG.py` derives match the 81 files in `symbols/18X18/` exactly.
+`slug = name lower-cased, non-alphanumerics → "-", trimmed`, plus `-color` when the category says colour/color — `Switch (closed)` → `switch-closed.png`, `AND` in *Logic Gates (Colour)* → `and-color.png`. The rule is written once per language: `symbols/slug.js` (imported by `index.html`) and `slug()` in `symbols_contract.py` (used by `renderPNG.py`). `python3 check.py` runs both over every symbol and fails if they disagree.
+
+### Check
+`python3 check.py` (no dependencies; uses `node` for the slug twin test when present): every module exports `{name, category, svg}` with a category from the closed set, `symbols/index.js` imports and lists every module and declares `version`, slugs are unique, and `symbols/18X18/` and `symbols/72X72/` hold exactly one PNG per slug. Run it after any symbol edit and after `renderPNG.py`.
+
+### Versions
+`symbols/index.js` exports `version` (semver) for a consumer (CAD / Schematics) to pin. Minor = symbols added; MAJOR = a rename or removal (a rename moves the PNG, since the filename is the slug).
+
+- **1.0.0** (2026-10-30) — the 81 symbols as first versioned.
 
 ---
 
@@ -36,7 +46,7 @@
 * **Re-render PNGs** after editing a symbol: `pip install --user cairosvg Pillow` (and the system Cairo library), then `python3 renderPNG.py`. It warns on a slug collision.
 * **Tests**: none.
 * **Web Portal Entry**: `display.json` → `kind: "web"`, `entry` `gallery.htm` and `app` its portal path `APK:Softapps/DATABASE/DATABASE.Electronics-Emoji/gallery.htm`, id `ElectronicsEmoji`. The Softapps walker (`PODS/POD.THIN/WEB.OsApi/SRC/server.py`, `walk_project()`) honours a declared `entry` before its `index.html` marker, so a launch opens the gallery. Inside the portal the pages are served over HTTP, so the module import works there.
-* **MQTT**: none. `display.json` names `APK.audio/Gui/Display/ElectronicsEmoji` as its display topic; nothing publishes or subscribes.
+* **MQTT**: none; `display.json` declares no topic.
 * **Remote Repository**: `https://github.com/LikeDotAudio/APK.softapp.DATABASE.Electronics-Emoji.git`
 
 ---
@@ -45,7 +55,7 @@
 What the code actually does, in the ecosystem's vocabulary (`Documentation/🏛Philosophy`):
 
 * **One symbol, one file, one source.** Each SVG is written once in its module; the gallery, the proposal and the PNGs are all derived from `symbols/index.js` (`gallery.htm`, `index.html`, `renderPNG.py`).
-* **A derived name, computed the same way twice.** PNG paths are a slug of `name` + `category`, so a page can find a PNG from the icon object alone; the two `slug()` implementations are told to stay in sync (`renderPNG.py` header).
+* **A derived name, computed the same way twice.** PNG paths are a slug of `name` + `category`, so a page can find a PNG from the icon object alone; the JS and Python `slug()` twins are proven equal by `check.py`.
 * **The second claimant stands down and verifies.** A second `server.py` asks the incumbent on the port whether it is serving the same `symbols/index.js` and defers rather than killing it (`_defer_to_incumbent()`, `probe_incumbent()`); `probe_incumbent` never raises, because it runs on the failure path.
 * **Local only.** `server.py` binds `127.0.0.1`.
 * **Accessible by construction.** Inline SVG tiles carry `role="img"` and an `aria-label`, and the visible caption is `aria-hidden` so nothing is announced twice (`gallery.htm`).
