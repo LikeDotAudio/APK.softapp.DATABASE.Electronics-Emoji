@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Proposal for Electronics Schematic Symbol Emoji</title>
 <link rel="stylesheet" href="vendor/apk-contracts/apk-tokens.css">
+    <link rel="stylesheet" href="vendor/apk-table/apk-table.css">
 <style>
     /* ---- White document. Letter page for PDF export. ---- */
     @page { size: letter; margin: 22mm 20mm; }
@@ -182,12 +183,14 @@
     .proof tbody td { padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; font-size: 0.85em; }
     .proof tbody tr:hover { background: #f6f9ff; }
     .proof .sym { display: flex; align-items: center; gap: 9px; white-space: nowrap; }
-    .proof .sym svg { width: 30px; height: 30px; background: #fff; border: 1px solid var(--line); border-radius: 4px; flex: none; }
+    .proof .sym img { width: 30px; height: 30px; background: #fff; border: 1px solid var(--line); border-radius: 4px; flex: none; }
     .proof .sym .nm { font-weight: 600; }
     .proof .cat { color: var(--muted); font-size: 0.85em; white-space: nowrap; }
     .proof .query .why { display: block; color: var(--muted); font-size: 0.82em; margin-top: 4px; max-width: 26ch; }
     .proof .lk { white-space: nowrap; }
     .proof .lk::before { content: "↗ "; color: var(--muted); }
+    .proof table.apk-table { color: var(--ink); }
+    .proof table.apk-table td { color: inherit; }
     .proof .cat-row td { background: #eef2f8; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.78em; }
 
     footer { margin-top: 40px; border-top: 1px solid var(--line); padding-top: 10px; font-family: sans-serif; font-size: 0.78em; color: var(--muted); }
@@ -316,18 +319,16 @@
         disambiguated links for every symbol.
     </p>
 
-    <table class="freq">
-        <thead>
-            <tr><th>Source</th><th>Query</th><th>Signal captured</th></tr>
-        </thead>
-        <tbody>
+    <div class="apk-table-host" data-apk-table-host="emoji-frequency-sources" data-apk-opts='{"id":"emoji-frequency-sources","className":"freq"}'>
+        <template data-apk-part="head"><tr><th>Source</th><th>Query</th><th>Signal captured</th></tr></template>
+        <template data-apk-part="body">
             <tr><td>Google Search</td><td>"resistor", "capacitor", "circuit diagram"</td><td>Total indexed result count</td></tr>
             <tr><td>Google Video Search</td><td>"how a transistor works", "logic gates"</td><td>Volume of instructional video content</td></tr>
             <tr><td>Google Trends — Web Search</td><td>"resistor" + component terms</td><td>Sustained, non-seasonal interest over 5+ years</td></tr>
             <tr><td>Google Trends — Image Search</td><td>"resistor symbol", "schematic symbols"</td><td>Demand for the <em>glyph</em> specifically, not just the part</td></tr>
             <tr><td>Google Books Ngram Viewer</td><td>resistor, capacitor, diode, transistor</td><td>Long-run frequency in published English text</td></tr>
-        </tbody>
-    </table>
+        </template>
+    </div>
 
     <div class="evidence">
         <div class="shot"><span class="src">📷 Google Search</span><span class="hint">Paste screenshot showing total result counts for component terms.</span></div>
@@ -390,15 +391,15 @@
 
     <!-- ==================== SELECTION FACTORS ==================== -->
     <h2>✅ 6. Selection Factors Summary</h2>
-    <table class="freq">
-        <tbody>
+    <div class="apk-table-host" data-apk-table-host="emoji-selection-factors" data-apk-opts='{"id":"emoji-selection-factors","className":"freq"}'>
+        <template data-apk-part="body">
             <tr><th>Compatibility</th><td>Renders cleanly at 18×18 and 72×72; monochrome-safe; works in dark and light UI via simple invert.</td></tr>
             <tr><th>Expected usage level</th><td>High — education (every intro electronics course), maker/STEM communities, engineering chat, documentation.</td></tr>
             <tr><th>Image distinctiveness</th><td>Each symbol is a long-standardized, unambiguous form (IEC 60617 / ANSI Y32.2).</td></tr>
             <tr><th>Completeness</th><td>Fills an entire missing domain rather than a single gap; coordinated set enables actual circuit expression.</td></tr>
             <tr><th>Frequently requested</th><td>Component terms rank highly across Search, Trends, and Ngram (see §4 and the appended proof table).</td></tr>
-        </tbody>
-    </table>
+        </template>
+    </div>
 
     <h2>⚠️ 7. Factors Against (per Unicode guidance)</h2>
     <ul>
@@ -433,16 +434,7 @@
         </div>
 
         <div class="scroll">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Symbol</th><th>Category</th><th>Search phrase</th>
-                        <th>Google&nbsp;Search</th><th>Google&nbsp;Video</th>
-                        <th>Trends: Web</th><th>Trends: Image</th><th>Books Ngram</th>
-                    </tr>
-                </thead>
-                <tbody id="proof-rows"></tbody>
-            </table>
+            <div id="proof-table" class="apk-table-host"></div>
         </div>
     </section>
 
@@ -452,6 +444,9 @@
         Export to PDF (browser “Print → Save as PDF”, Letter) after inserting the §4 screenshots.
     </footer>
 
+    <!-- THE ONE TABLE (FrontEnd/shared/apk-table.*, vendored; check.sh webshared). Loaded
+         here, after the tables' hosts, so it stands them in before the module below runs. -->
+    <script src="vendor/apk-table/apk-table.js"></script>
     <script type="module">
         import icons from './symbols/index.js';
         import { slug } from './symbols/slug.js';
@@ -584,48 +579,50 @@
             baseline.appendChild(a);
         }
 
-        const rows = document.getElementById('proof-rows');
-        const link = (url, text) => {
-            const a = document.createElement('a');
-            a.className = 'lk'; a.href = url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = text;
-            const td = document.createElement('td'); td.appendChild(a); return td;
-        };
-
+        // THE ONE TABLE (ROAD-3494): the proof links are APKTable 'emoji-frequency-proof'
+        // (vendor/apk-table, held to /FrontEnd/shared by check.sh webshared). A symbol is
+        // drawn as an <img> of its own SVG file's text, never spliced in as markup.
+        const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+        const link = (text) => (url) => { const a = el('a', 'lk', text); a.href = url; a.target = '_blank'; a.rel = 'noopener'; return a; };
+        const proof = [];
         for (const category of order) {
             if (category.includes('Colour')) continue;
-            const catRow = document.createElement('tr');
-            catRow.className = 'cat-row';
-            const catCell = document.createElement('td');
-            catCell.colSpan = 8; catCell.textContent = category;
-            catRow.appendChild(catCell); rows.appendChild(catRow);
-
             const sorted = [...byCategory.get(category)].sort((a, b) => a.name.localeCompare(b.name));
             for (const icon of sorted) {
                 const d = MAP[icon.name] || { search: icon.name.toLowerCase(), trends: icon.name.toLowerCase(), why: '' };
-                const tr = document.createElement('tr');
-
-                const symTd = document.createElement('td');
-                symTd.innerHTML = `<div class="sym">${icon.svg}<span class="nm">${icon.name}</span></div>`;
-                tr.appendChild(symTd);
-
-                const catTd = document.createElement('td');
-                catTd.className = 'cat'; catTd.textContent = icon.category;
-                tr.appendChild(catTd);
-
-                const qTd = document.createElement('td');
-                qTd.className = 'query';
-                qTd.innerHTML = `<code>[${d.search}]</code>` + (d.why ? `<span class="why">${d.why}</span>` : '');
-                tr.appendChild(qTd);
-
-                tr.appendChild(link(gSearch(d.search), 'Search'));
-                tr.appendChild(link(gVideo(d.search),  'Video'));
-                tr.appendChild(link(tWeb(d.trends),    'Trends · Web'));
-                tr.appendChild(link(tImg(d.trends),    'Trends · Image'));
-                tr.appendChild(link(ngram(d.trends),   'Ngram'));
-
-                rows.appendChild(tr);
+                proof.push({ name: icon.name, svg: icon.svg, category: icon.category, search: d.search, why: d.why || '',
+                    gSearch: gSearch(d.search), gVideo: gVideo(d.search), tWeb: tWeb(d.trends), tImg: tImg(d.trends), ngram: ngram(d.trends) });
             }
         }
+        APKTable.create(document.getElementById('proof-table'), {
+            id: 'emoji-frequency-proof',
+            editable: false,
+            searchPlaceholder: 'Filter symbols',
+            columns: [
+                { key: 'name', label: 'Symbol', render: (v, r) => {
+                    const box = el('div', 'sym');
+                    const img = el('img');
+                    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(r.svg);
+                    img.alt = v; img.width = 30; img.height = 30;
+                    box.appendChild(img);
+                    box.appendChild(el('span', 'nm', v));
+                    return box;
+                } },
+                { key: 'category', label: 'Category', cellClass: () => 'cat' },
+                { key: 'search', label: 'Search phrase', cellClass: () => 'query', render: (v, r) => {
+                    const box = el('span');
+                    box.appendChild(el('code', '', `[${v}]`));
+                    if (r.why) box.appendChild(el('span', 'why', r.why));
+                    return box;
+                } },
+                { key: 'gSearch', label: 'Google Search', render: link('Search') },
+                { key: 'gVideo', label: 'Google Video', render: link('Video') },
+                { key: 'tWeb', label: 'Trends: Web', render: link('Trends · Web') },
+                { key: 'tImg', label: 'Trends: Image', render: link('Trends · Image') },
+                { key: 'ngram', label: 'Books Ngram', render: link('Ngram') },
+            ],
+            rows: proof,
+        });
     </script>
 
 </body>
