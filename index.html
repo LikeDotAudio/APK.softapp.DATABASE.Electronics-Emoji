@@ -446,6 +446,8 @@
 
     <!-- THE ONE TABLE (FrontEnd/shared/apk-table.*, vendored; check.sh webshared). Loaded
          here, after the tables' hosts, so it stands them in before the module below runs. -->
+    <script src="vendor/apk-contracts/apk-contracts.global.js"></script>
+    <script src="vendor/apk-softapp/apk-softapp.js"></script>
     <script src="vendor/apk-table/apk-table.js"></script>
     <script type="module">
         import icons from './symbols/index.js';
@@ -622,6 +624,32 @@
                 { key: 'ngram', label: 'Books Ngram', render: link('Ngram') },
             ],
             rows: proof,
+        });
+    </script>
+    <script>
+        // The symbols are ES modules: a file:// open, or a server that is not
+        // server.py, leaves this page empty with no error. Say so, with the way back.
+        document.addEventListener('DOMContentLoaded', function () {
+            var S = window.APKSoftapp;
+            if (!S) return;
+            S.describe({
+                name: 'Electronics Emoji — proposal',
+                does: 'The Unicode proposal for schematic symbol emoji, laid out for Letter paper, with its gallery and frequency-proof links.',
+                inputs: [{ name: 'Symbol modules', from: 'symbols/index.js (81 ES modules, each with its inline SVG)', kind: 'file' },
+                         { name: 'Rendered PNGs', from: 'symbols/18X18/ and symbols/72X72/ (made by renderPNG.py)', kind: 'file' }],
+                outputs: [{ name: 'Proposal PDF', to: 'browser Print, Save as PDF (Letter)', kind: 'file' },
+                          { name: 'Frequency-proof links', to: 'Google Search / Video / Trends / Books Ngram in a new tab' }],
+                controls: [{ name: 'Filter symbols', how: 'the box above the proof table' },
+                           { name: 'Proof links', how: 'click a cell to open that search in a new tab' }],
+                problems: ['unsupported_browser', 'fetch_failed']
+            });
+            var slot = document.getElementById('gallery');
+            if (slot && !slot.children.length) S.showProblem(location.protocol === 'file:' ? 'unsupported_browser' : 'fetch_failed', {
+                subject: 'symbols/index.js',
+                detail: location.protocol === 'file:' ? 'Opened as a file: browsers refuse ES-module imports under file://.' : 'symbols/index.js did not load from ' + location.origin + '.',
+                fix: ['In this folder run: python3 server.py — it opens http://127.0.0.1:8093/gallery.htm (APK_EMOJI_PORT changes the port).'],
+                onRetry: function () { location.reload(); }
+            });
         });
     </script>
 
